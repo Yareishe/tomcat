@@ -16,14 +16,4 @@
     <url-pattern>/time</url-pattern>
   </servlet-mapping>
 
-  <servlet>
-    <servlet-name>TimezoneValidateFilter</servlet-name>
-    <servlet-class>org.example.TimezoneValidateFilter</servlet-class>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>TimezoneValidateFilter</servlet-name>
-    <url-pattern>/time?timezone=maxim</url-pattern>
-  </servlet-mapping>
-
 </web-app>
