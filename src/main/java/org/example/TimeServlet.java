@@ -1,41 +1,35 @@
 package org.example;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
-import javax.servlet.ServletException;
+
+
+
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+
 
 public class TimeServlet extends HttpServlet {
+
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html");
-        response.setCharacterEncoding("UTF-8");
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
-        String timezone = request.getParameter("timezone");
-        String currentTime;
+            resp.getWriter()
+                    .write(DateTimeFormatter.ISO_LOCAL_TIME
+                            .format(LocalDateTime.now(ZoneId.of(
+                                            URLEncoder.encode(
+                                                    req.getParameter("timezone"), String.valueOf(StandardCharsets.UTF_8)
+                                            )
+                                    ))
+                            )
+                    );
 
-        if (timezone != null && !timezone.isEmpty()) {
-            currentTime = getCurrentTimeWithTimezone(timezone);
-        } else {
-            currentTime = getCurrentTimeInUTC();
-        }
-
-        response.getWriter().write( currentTime );
-    }
-
-    private String getCurrentTimeInUTC() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
-        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-        return sdf.format(new Date());
-    }
-
-    private String getCurrentTimeWithTimezone(String timezone) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
-        sdf.setTimeZone(TimeZone.getTimeZone(timezone));
-        return sdf.format(new Date());
+        resp.getWriter().close();
     }
 }
