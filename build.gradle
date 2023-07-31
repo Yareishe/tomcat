@@ -20,6 +20,9 @@ dependencies {
     implementation group: 'org.apache.tomcat.maven', name: 'tomcat7-maven-plugin', version: '2.2'
 }
 
+java {    sourceCompatibility = "1.8"
+    targetCompatibility = "1.8"
+}
 
 test {
     useJUnitPlatform()
