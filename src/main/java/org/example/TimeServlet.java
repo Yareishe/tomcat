@@ -2,6 +2,8 @@
 package org.example;
 
 
+
+
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -21,29 +23,18 @@ public class TimeServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        if (req.getParameter("timezone") == null || req.getParameter("timezone").isEmpty()) {
+        String timezone = req.getParameter("timezone");
+        if (timezone == null || timezone.isEmpty()) {
             resp.getWriter().write(getDate("UTC"));
-
         } else {
-            String timezone = req.getParameter("timezone");
-            resp.getWriter().write(getDate(timezone));
+            String queryString = req.getQueryString();
+            resp.getWriter().write(getDate(queryString.split("=")[1]));
         }
         resp.getWriter().close();
     }
-    public static String getDate(String param) throws UnsupportedEncodingException {
-        return DateTimeFormatter.ISO_LOCAL_TIME
-                .format(LocalDateTime.now(ZoneId.of(
-                        URLDecoder.decode(
-                                param, String.valueOf(StandardCharsets.UTF_8)
-                        ))));
-    }
 
-
-    public static String getDate1(String param) {
-        Date actualDate = new Date();
-        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss z")
-                .withZone(ZoneId.of(param));
-        return dateFormat.format(actualDate.toInstant());
+    public static String getDate(String param) {
+        return DateTimeFormatter.ISO_LOCAL_TIME.format(LocalDateTime.now(ZoneId.of(param)));
     }
 
 }
