@@ -27,21 +27,18 @@ public class TimeServlet extends HttpServlet {
         if (timezone == null || timezone.isEmpty()) {
             resp.getWriter().write(getDate("UTC"));
         } else {
-            String queryString = req.getQueryString();
-            resp.getWriter().write(getDate(queryString.split("=")[1]));
+            resp.getWriter().write(getDate(timezone));
         }
         resp.getWriter().close();
     }
 
-    public static String getDate(String param) {
-        return DateTimeFormatter.ISO_LOCAL_TIME.format(LocalDateTime.now(ZoneId.of(param)));
+    public static String getDate(String param) {Date actualDate = new Date();
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z").withZone(ZoneId.of(param));
+        return dateFormat.format(actualDate.toInstant());
     }
 
 }
-
 /*
-
-
  if (req.getParameter("timezone") == null || req.getParameter("timezone").isEmpty()) {
             resp.getWriter().write(getDate("UTC"));
 
@@ -53,7 +50,6 @@ public class TimeServlet extends HttpServlet {
 
         resp.getWriter().close();
     }
-
     public static String getDate(String param) {
         Date actualDate = new Date();
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss z")
